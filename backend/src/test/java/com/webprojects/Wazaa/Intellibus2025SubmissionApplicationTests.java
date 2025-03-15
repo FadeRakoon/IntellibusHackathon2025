@@ -1,10 +1,10 @@
-package com.webprojects.Intellibus.submission;
+package com.webprojects.Wazaa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class IntellibusSubmissionApplicationTests {
+class Intellibus2025SubmissionApplicationTests {
 
 	@Test
 	void contextLoads() {
