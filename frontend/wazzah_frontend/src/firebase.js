@@ -13,8 +13,8 @@ const firebaseConfig = {
   projectId: "testing-5b515",
   storageBucket: "testing-5b515.firebasestorage.app",
   messagingSenderId: "272990440522",
-  appId: "1:272990440522:web:f93282633afb29a6336ab3",
-  measurementId: "G-HH9BWF31XJ"
+  appId: "1:272990440522:web:f8a7a2c2b99f0e57336ab3",
+  measurementId: "G-GM9D1F3Q9T"
 };
 
 
