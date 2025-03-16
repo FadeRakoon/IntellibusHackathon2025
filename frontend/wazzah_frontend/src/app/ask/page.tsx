@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 export default function AskPage() {
   const [question, setQuestion] = useState("");
   const [questionId, setQuestionId] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleGenerateLink = () => {
     if (!question.trim()) return;
-    const newQuestionId = uuidv4(); // Generate unique ID for the question
+    const newQuestionId = uuidv4();
     setQuestionId(newQuestionId);
   };
 
@@ -34,18 +36,26 @@ export default function AskPage() {
           <p className="text-lg">Share this link:</p>
           <input
             readOnly
-            value={`${window.location.origin}/view/${questionId}`}
+            value={`${window.location.origin}/answer/${questionId}`}
             className="border p-2 w-full max-w-md"
           />
           <button
             onClick={() =>
               navigator.clipboard.writeText(
-                `${window.location.origin}/view/${questionId}`
+                `${window.location.origin}/answer/${questionId}`
               )
             }
             className="bg-green-500 text-white px-4 py-2 mt-2"
           >
             Copy Link
+          </button>
+          <br />
+          {/* New View Answers Button */}
+          <button
+            onClick={() => router.push(`/view/${questionId}`)}
+            className="bg-purple-500 text-white px-4 py-2 mt-2"
+          >
+            View Answers
           </button>
         </div>
       )}
