@@ -4,6 +4,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  QuerySnapshot,
   query,
   onSnapshot,
   deleteDoc,
@@ -12,11 +13,11 @@ import {
 import { db } from '../firebase';
 
 export default function Home() {
-  const [responses, setResponses] = useState([
-    {answer: "no"}, 
-    {answer: "jada kingdom1"},
-    {answer: "gyal a gyal morewhile"},
-  ])
+  const [responses, setResponses] = useState<{ answer: string }[]>([
+      // {answer: "no"}, 
+      // {answer: "jada kingdom1"},
+      // {answer: "gyal a gyal morewhile"},
+  ]);
   const [response, setResponse] = useState({answer: ''})
 
   //adding
@@ -32,7 +33,19 @@ export default function Home() {
 
 
   //reading
+  useEffect(() => {
+    const q = query(collection(db, 'items'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let itemsArr: any[] | React.SetStateAction<{ answer: string; }> = [];
 
+      querySnapshot.forEach((doc: { data: () => any; id: any; }) => {
+        itemsArr.push({ ...doc.data(), id: doc.id });
+      });
+      setResponses(itemsArr);
+
+      return () => unsubscribe();
+    });
+  }, []);
 
   //deleting
 
