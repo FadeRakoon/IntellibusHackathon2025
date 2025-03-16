@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore large binary files
+backend/node_modules/@oven/bun-windows-x64-baseline/bin/bun.exe
+backend/node_modules/bun/bin/bun.exe
+frontend/node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node
