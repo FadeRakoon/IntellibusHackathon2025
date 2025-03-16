@@ -1,58 +1,30 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
 
-interface InputFieldProps {
-  placeholder: string;
-  secureTextEntry?: boolean;
-  value?: string;
-  onChangeText?: (text: string) => void;
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
+  error?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-  placeholder,
-  secureTextEntry = false,
-  value,
-  onChangeText,
+export const InputField: React.FC<InputFieldProps> = ({
   icon,
+  error,
+  className = "",
+  ...props
 }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.iconContainer}>{icon}</View>
-      <TextInput
-        style={styles.input}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        value={value}
-        onChangeText={onChangeText}
-        placeholderTextColor="#9ca3af" // Gray-400
+    <div className="relative">
+      {icon && (
+        <div className="absolute left-4 top-2/4 -translate-y-2/4">{icon}</div>
+      )}
+      <input
+        className={`py-3 pr-4 ${
+          icon ? "pl-12" : "pl-4"
+        } w-full text-gray-600 rounded-lg border border-solid ${
+          error ? "border-red-300" : "border-gray-300"
+        } ${className}`}
+        {...props}
       />
-    </View>
+      {error && <div className="mt-1 text-sm text-red-600">{error}</div>}
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#e5e7eb", // Gray-200
-    borderRadius: 8,
-    marginBottom: 16,
-    backgroundColor: "white",
-  },
-  iconContainer: {
-    padding: 12,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingRight: 12,
-    fontSize: 16,
-    color: "#1f2937", // Gray-800
-  },
-});
-
-export default InputField;

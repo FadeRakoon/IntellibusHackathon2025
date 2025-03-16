@@ -1,151 +1,92 @@
+"use client";
+
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import InputField from "./InputField";
-import DividerWithText from "./DividerWithText";
-import SocialButton from "./SocialButton";
+import { InputField } from "./InputField";
+import { Button } from "./Button";
 
-// This would normally be imported from a vector icons library
-const UserIcon = () => (
-  <View
-    style={{
-      width: 20,
-      height: 20,
-      backgroundColor: "#6366f1",
-      borderRadius: 10,
-    }}
-  />
-);
+interface LoginFormProps {
+  onLogin?: (username: string, password: string) => Promise<void>;
+}
 
-const LockIcon = () => (
-  <View
-    style={{
-      width: 20,
-      height: 20,
-      backgroundColor: "#6366f1",
-      borderRadius: 10,
-    }}
-  />
-);
-
-const GoogleIcon = () => (
-  <View
-    style={{
-      width: 24,
-      height: 24,
-      backgroundColor: "#EA4335",
-      borderRadius: 12,
-    }}
-  />
-);
-
-const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    console.log("Login with:", username, password);
-    // Implement login logic here
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    if (error) setError("");
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Login with Google");
-    // Implement Google login logic here
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (error) setError("");
+  };
+
+  const handleLogin = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    // Validate fields
+    if (!username || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      if (onLogin) {
+        await onLogin(username, password);
+      } else {
+        // Default implementation if no onLogin prop is provided
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log("Logging in with:", username);
+      }
+    } catch (err) {
+      setError("Invalid username or password");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formContainer}>
-        <View style={styles.header}>
-          <Text style={styles.wazzah}>WAZZAH!</Text>
-        </View>
+    <div className="flex flex-col gap-6">
+      <InputField
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={handleUsernameChange}
+        icon={<i className="ti ti-user text-gray-400" />}
+      />
 
-        <Text style={styles.welcomeText}>Welcome Back</Text>
+      <InputField
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={handlePasswordChange}
+        icon={<i className="ti ti-key text-gray-400" />}
+      />
 
-        <View style={styles.form}>
-          <InputField
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
-            icon={<UserIcon />}
-          />
+      {error && <div className="mt-0 text-sm text-red-600">{error}</div>}
 
-          <InputField
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            icon={<LockIcon />}
-          />
+      <Button onClick={handleLogin} isLoading={isLoading}>
+        {isLoading ? "Logging in..." : "Login"}
+      </Button>
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
+      <div className="flex gap-4 items-center mx-0 my-4">
+        <div className="flex-1 h-px bg-gray-200" />
+        <span className="text-sm text-gray-500">or</span>
+        <div className="flex-1 h-px bg-gray-200" />
+      </div>
 
-          <DividerWithText text="or" />
-
-          <SocialButton
-            text="Continue with Google"
-            icon={<GoogleIcon />}
-            onPress={handleGoogleLogin}
-          />
-        </View>
-      </View>
-    </View>
+      <Button
+        variant="outline"
+        icon={<i className="ti ti-brand-google text-xl text-red-500" />}
+      >
+        Continue with Google
+      </Button>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  formContainer: {
-    width: "100%",
-    maxWidth: 400,
-    padding: 24,
-    borderRadius: 12,
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  wazzah: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#6366f1", // Indigo-500
-    letterSpacing: 1,
-  },
-  welcomeText: {
-    fontSize: 28,
-    fontWeight: "600",
-    color: "#1f2937", // Gray-800
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  form: {
-    width: "100%",
-  },
-  loginButton: {
-    backgroundColor: "#6366f1", // Indigo-500
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  loginButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
-
-export default LoginForm;
