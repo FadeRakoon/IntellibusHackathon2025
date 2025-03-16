@@ -72,6 +72,7 @@ export default function AskPage() {
           <div className="mt-6">
             <h2 className="text-2xl font-bold">Answers:</h2>
             <ul>
+              
               {answers.length > 0 ? (
                 answers.map((answer, index) => (
                   <li key={index} className="border p-2 my-2">{answer}</li>
