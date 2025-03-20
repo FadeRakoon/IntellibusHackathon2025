@@ -51,14 +51,14 @@ export const ActionButtons = () => {
   return (
     <div className="flex flex-wrap gap-8 justify-center w-full max-w-screen-xl max-md:gap-6 max-sm:flex-col max-sm:gap-4 max-sm:items-center">
       <ActionButton
-        href="/register"
+        href="/RegisterPage"
         icon={<RegisterIcon />}
         label="REGISTER"
         bgColor="bg-green-500"
         shadowColor="shadow-[0px_8px_16px_rgba(57,191,52,0.3)]"
       />
       <ActionButton
-        href="/LoginPage"
+        href="/LoginPage/LoginPage.tsx"
         icon={<LoginIcon />}
         label="LOGIN"
         bgColor="bg-fuchsia-600"
